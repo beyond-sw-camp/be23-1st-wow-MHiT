@@ -603,25 +603,47 @@ DELIMITER ;
 
 
 -- 1.경기예매
-delimiter //
-
-create procedure game_res(
-    in p_user_email varchar(255), 
-    in p_game_id bigint, 
-    in p_ticket_count bigint, 
-    in p_game_date datetime
+CREATE PROCEDURE game_res(
+    IN p_user_id        VARCHAR(36),
+    IN p_game_id        BIGINT,
+    IN p_game_res_count INT
 )
-begin
-    insert into game_res_list(user_id, game_id, game_res_count, game_res_date)
-    values (
-        (select user_id from user_list where user_email = p_user_email limit 1),
-        p_game_id,
-        p_ticket_count,
-        p_game_date
-    );
-end//
+BEGIN
+    DECLARE v_dummy BIGINT;
 
-delimiter ;
+    -- 에러 나면 자동으로 롤백하고 에러 다시 던지기
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    SELECT game_res_id
+      INTO v_dummy
+      FROM game_res_list
+     WHERE user_id = p_user_id
+       AND game_id = p_game_id
+     FOR UPDATE;
+
+    INSERT INTO game_res_list (
+        user_id,
+        game_id,
+        game_res_count,
+        game_res_date
+    )
+    VALUES (
+        p_user_id,
+        p_game_id,
+        p_game_res_count,
+        NOW()
+    );
+
+    COMMIT;
+END //
+
+DELIMITER ;
 
 -- 2. 버스예매
 DELIMITER //
