@@ -17,7 +17,7 @@
 
 **팀원**
 
-🐻 [김도균](https://github.com/kimdogyun) | 🐨 김태환 | 🐒 황정윤 | 🐰 홍진희
+🐻 [김도균](https://github.com/kimdogyun) | 🐨 [김태환](https://github.com/iamxoghks) | 🐒 [황정윤](https://github.com/yune22) | 🐰 [홍진희](https://github.com/lampshub)
 
 ---
 
