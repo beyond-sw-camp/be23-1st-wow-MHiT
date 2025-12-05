@@ -1,8 +1,7 @@
 -- 경기 예매 상황 실시간 조회  
 -- 홈팀명, 에워팀명, 경기 시작 시간, 경기별 판매된 좌석수, 남은 좌석수, 전체 좌석수
 delimiter //
-create procedure get_game_res_status(
-in user_id_in varchar(36))
+create procedure get_game_res_status()
 
 begin
     select 
@@ -19,8 +18,9 @@ begin
     on g_s.h_team_id = ht.team_id
     left join team_list at
     on g_s.a_team_id = at.team_id
-    where g_r.user_id=user_id_in
+    where g_s.game_date> now() 
     group by g_s.game_id;
+
 end //
 delimiter ;
 
