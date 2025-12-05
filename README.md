@@ -246,6 +246,8 @@ CREATE TABLE bus_res_list (
 );
 
 ```
+</details>
+
   <details>
   <summary><b>회원기능</b></summary>
 
@@ -353,6 +355,9 @@ delimiter ;
 
 
 ```
+</details>
+
+
   <details>
   <summary><b>조회</b></summary>
 
@@ -577,6 +582,8 @@ DELIMITER ;
 
 
 ```
+</details>
+
   <details>
   <summary><b>예매</b></summary>
 
@@ -609,6 +616,8 @@ delimiter ;
 
 
 ```
+</details>
+
   <details>
   <summary><b>관리</b></summary>
 
