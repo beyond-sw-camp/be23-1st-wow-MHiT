@@ -1,3 +1,4 @@
+--구장수정프로시저
 delimiter //
 
 create procedure update_ground (

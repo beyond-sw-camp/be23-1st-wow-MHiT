@@ -1,3 +1,4 @@
+--구장등록프로시저
 delimiter //
 
 create procedure register_ground (
