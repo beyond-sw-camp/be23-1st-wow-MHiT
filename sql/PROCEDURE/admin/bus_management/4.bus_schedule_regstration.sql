@@ -1,3 +1,5 @@
+----- 버스 스케쥴 등록. 해당하는 경기의 게임 id 를 가지고 등록 -----
+----- active 아닌 버스는 목록에서 제외 
 DELIMITER //
 
 CREATE PROCEDURE insert_bus_schedule(
@@ -27,10 +29,12 @@ BEGIN
        AND bs.game_id = gs.game_id
     WHERE gs.game_id = p_game_id      
       AND gs.game_date > NOW()        
-      AND bs.bus_id IS NULL;          
+      AND bs.bus_id IS NULL           
+      AND b.is_active = 1;            
 END //
 
 DELIMITER ;
+
 
 
 ----- procedure call -----
