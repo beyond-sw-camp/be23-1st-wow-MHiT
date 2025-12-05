@@ -1,5 +1,7 @@
 #  MHiT DB 프로젝트
+<p align="center">
 <img width="512" height="512" alt="mhit1" src="https://github.com/user-attachments/assets/d171ae7d-de76-44a6-a458-1e431794b067" />
+</p>
 
 <div align="center">
 
