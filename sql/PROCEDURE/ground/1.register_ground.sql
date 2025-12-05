@@ -23,7 +23,7 @@ begin
         p_seat_count
     );
 
-    -- auto_increment 로 생성된 구장 id 반환
+    
     set p_new_ground_id = last_insert_id();
 end//
 
