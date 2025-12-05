@@ -1,7 +1,13 @@
 #  MHiT DB 프로젝트
 <img width="1024" height="1024" alt="mhit1" src="https://github.com/user-attachments/assets/d171ae7d-de76-44a6-a458-1e431794b067" />
 
-야구 경기와 셔틀 예약을 한 번에!
+<div align="center">
+
+# ⚾ 야구 예매와 셔틀 예약을 한 번에! 🚌
+
+</div>
+
+
 
 &nbsp;
 
