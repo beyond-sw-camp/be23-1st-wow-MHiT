@@ -35,6 +35,7 @@ DELIMITER ;
 
 ----- procedure call -----
 -- 버스를 등록한 관리자가 아닌 다른 관리자가 버스 스케쥴을 등록할 때
-call insert_bus_schedule(경기id, 어드민id);
+CALL insert_bus_schedule(경기id, 어드민id);
 -- 버스를 등록한 관리자가 버스 스케쥴을 등록할 때
-call insert_bus_schedule(경기id, NULL);
+CALL insert_bus_schedule(경기id, NULL);
+CALL insert_bus_schedule(75, '');
