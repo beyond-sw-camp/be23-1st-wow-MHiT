@@ -33,6 +33,12 @@
 
 ---
 
+## 🧭 진행흐름도
+<img width="3921" height="2589" alt="MHiT" src="https://github.com/user-attachments/assets/6da0a993-294c-4bc5-95b0-4320e9ef3637" />
+
+
+---
+
 ## 🧩 기능 구조
 
 ### 🧑‍🤝‍🧑 회원 기능
