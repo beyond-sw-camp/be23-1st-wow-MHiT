@@ -1,5 +1,7 @@
 #  MHiT DB 프로젝트
-<img width="1024" height="1024" alt="mhit1" src="https://github.com/user-attachments/assets/d171ae7d-de76-44a6-a458-1e431794b067" />
+<p align="center">
+<img width="512" height="512" alt="mhit1" src="https://github.com/user-attachments/assets/d171ae7d-de76-44a6-a458-1e431794b067" />
+</p>
 
 <div align="center">
 
@@ -34,7 +36,6 @@
 <img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-<img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 </p>
 
@@ -58,9 +59,9 @@
 | 기능 구분 | 상세 기능 |
 |----------|-----------|
 | 🎟 **경기 예매** | - 날짜·구단·구장 기준 경기 검색 <br> - 좌석 기반 예매 기능 <br> - 경기 예매 내역 조회 |
-| 🚌 **셔틀버스 예약** | - 경기 일정과 연동된 셔틀버스 노선 조회 <br> - 출발지·도착지 및 시간 확인 <br> - 이용 가능 버스 정보 조회 |
+| 🚌 **셔틀버스 예약** | - 경기 일정과 연동된 셔틀버스 노선 조회 <br> -  이용 가능 버스 정보 조회 |
 | 🏟 **구단 조회** | - 구단 기본 정보 조회 <br> - 구단 경기 일정 조회 <br> - 구단 승률, 선호 팬 수 조회 |
-| ⚾ **경기 조회** | - 전체 경기 일정 조회 <br> - 특정 구단 경기 조회 <br> - 경기 결과(승/패/무), 경기 상태(경기 전/취소) 확인 |
+| ⚾ **경기 조회** | - 전체 경기 일정 조회 <br> - 특정 구단 경기 조회 <br> - 경기 결과(승/패/무), 경기 상태 확인 |
 | 🏟 **구장 조회** | - 구장 정보(위치·좌석 수 등) 조회 <br> - 해당 구장의 경기 일정 조회 <br> - 연계 셔틀버스 정보 조회 |
 
 
@@ -247,6 +248,7 @@ create table game_res_seat_detail(
 );
 
 --버스 예매
+
 CREATE TABLE bus_res_list (
     bus_res_id BIGINT NOT NULL auto_increment,
     bs_s_id BIGINT,
@@ -603,27 +605,51 @@ DELIMITER ;
 
 
 -- 1.경기예매
-delimiter //
-
-create procedure game_res(
-    in p_user_email varchar(255), 
-    in p_game_id bigint, 
-    in p_ticket_count bigint, 
-    in p_game_date datetime
+CREATE PROCEDURE game_res(
+    IN p_user_id        VARCHAR(36),
+    IN p_game_id        BIGINT,
+    IN p_game_res_count INT
 )
-begin
-    insert into game_res_list(user_id, game_id, game_res_count, game_res_date)
-    values (
-        (select user_id from user_list where user_email = p_user_email limit 1),
-        p_game_id,
-        p_ticket_count,
-        p_game_date
-    );
-end//
+BEGIN
+    DECLARE v_dummy BIGINT;
 
-delimiter ;
+    -- 에러 나면 자동으로 롤백하고 에러 다시 던지기
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    SELECT game_res_id
+      INTO v_dummy
+      FROM game_res_list
+     WHERE user_id = p_user_id
+       AND game_id = p_game_id
+     FOR UPDATE;
+
+    INSERT INTO game_res_list (
+        user_id,
+        game_id,
+        game_res_count,
+        game_res_date
+    )
+    VALUES (
+        p_user_id,
+        p_game_id,
+        p_game_res_count,
+        NOW()
+    );
+
+    COMMIT;
+END //
+
+DELIMITER ;
 
 -- 2. 버스예매
+----- 버스 예약 -----
+
 DELIMITER //
 
 CREATE PROCEDURE insert_bus_reservation(
@@ -648,6 +674,97 @@ BEGIN
         ROLLBACK;
         RESIGNAL;
     END;
+
+    START TRANSACTION;
+
+    -- 스케줄/게임 정보
+    SELECT game_id, bus_id, is_canceled
+      INTO v_game_id, v_bus_id, v_is_canceled
+      FROM bus_schedule_list
+     WHERE bs_s_id = p_bs_s_id;
+
+    IF v_game_id IS NULL THEN
+        SET v_msg = '유효하지 않은 버스 스케줄입니다.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
+    END IF;
+
+    IF v_is_canceled = 1 THEN
+        SET v_msg = '취소된 버스 스케줄입니다.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
+    END IF;
+
+    -- 경기 예약 여부 확인
+    SELECT COUNT(*)
+      INTO v_has_game_res
+      FROM game_res_list
+     WHERE user_id = p_user_id
+       AND game_id = v_game_id;
+
+    IF v_has_game_res = 0 THEN
+        SET v_msg = '잘못된 요청입니다.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
+    END IF;
+
+    -- 버스 기본 정보 좌석수/활성 여부
+    SELECT bus_seat_count, is_active
+      INTO v_bus_seat_count, v_bus_is_active
+      FROM bus_list
+     WHERE bus_id = v_bus_id;
+
+    IF v_bus_seat_count IS NULL THEN
+        SET v_msg = '버스 정보가 존재하지 않습니다.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
+    END IF;
+
+    IF v_bus_is_active = 0 THEN
+        SET v_msg = '비활성화된 버스입니다.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
+    END IF;
+
+    -- bus_res_list 잠그면서 처리
+
+    -- 같은 유저의 중복 예약 확인 + 잠금
+    SELECT COUNT(*)
+      INTO v_dup
+      FROM bus_res_list
+     WHERE bs_s_id = p_bs_s_id
+       AND user_id = p_user_id
+     FOR UPDATE;
+
+    IF v_dup > 0 THEN
+        SET v_msg = '이미 이 버스를 예약한 사용자입니다.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
+    END IF;
+
+    -- 현재 예약 인원 합계 + 잠금
+    SELECT IFNULL(SUM(bus_res_count), 0)
+      INTO v_current_reserved
+      FROM bus_res_list
+     WHERE bs_s_id = p_bs_s_id
+     FOR UPDATE;
+
+    SET v_remain = v_bus_seat_count - v_current_reserved;
+
+    IF p_bus_res_count > v_remain THEN
+        SET v_msg = CONCAT('예약 가능 인원이 부족합니다. 남은 좌석: ', v_remain);
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
+    END IF;
+
+    -- 5) INSERT
+    INSERT INTO bus_res_list (bs_s_id, user_id, bus_res_count)
+    VALUES (p_bs_s_id, p_user_id, p_bus_res_count);
+
+    COMMIT;
+
+    SELECT '버스 예약이 완료되었습니다.' AS message,
+           v_bus_id                              AS bus_id,
+           p_bs_s_id                             AS bs_s_id,
+           p_bus_res_count                       AS reserved_count,
+           v_remain - p_bus_res_count            AS remain_seat_after;
+END //
+
+DELIMITER ;
+
 
 
 ```
@@ -768,17 +885,17 @@ CREATE PROCEDURE insert_bus_one(
 BEGIN
     DECLARE v_cnt INT;
 
-    -- 1) 이미 존재하는 차량번호인지 확인
+    -- 이미 존재하는 차량번호인지 확인
     SELECT COUNT(*)
       INTO v_cnt
       FROM bus_list
      WHERE bus_num = p_bus_num;
 
-    -- 2) 있으면 안내 메시지만 출력
+    -- 있으면 안내 메시지만 출력
     IF v_cnt > 0 THEN
         SELECT CONCAT('이미 등록된 차량번호입니다: ', p_bus_num) AS message;
 
-    -- 3) 없으면 INSERT + 성공 메시지
+    -- 없으면 INSERT + 성공 메시지
     ELSE
         INSERT INTO bus_list (
             ground_id,
