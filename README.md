@@ -33,60 +33,9 @@
 
 ---
 
-## 🧩 기능 구조
+## 🧭 진행흐름도
+<img width="1484" height="425" alt="MHIT 2" src="https://github.com/user-attachments/assets/ff7af975-6909-43aa-96db-d8936c257cb0" />
 
-### 🧑‍🤝‍🧑 회원 기능
-- 회원가입
-- 회원정보 수정
-- 회원정보 조회
-- 회원 탈퇴
-- 로그인
-  - 가입 정보 조회
-  - 아이디 찾기
-  - 비밀번호 찾기
-- 마이페이지
-  - 개인정보 및 선호 구단 변경
-  - 예매 내역 조회
-
-### ⚾ 구단 조회
-- 구단 정보 조회
-- 구단 경기 조회
-- 구단 순위 조회
-- 경기 정보 조회
-
-### 🎟 예매 기능
-- 경기 예매
-- 경기 예매 내역 조회
-- 버스 예매
-- 버스 예매 내역 조회
-
-### 🛠 관리자 기능
-#### 👤 관리자 관리
-- 관리자 등록
-- 관리자 수정
-- 관리자 조회
-- 관리자 탈퇴
-
-#### 🏟 팀 관리
-- 구단 등록
-- 구단 수정
-- 구단 삭제
-
-#### 🏆 경기 관리
-- 경기 등록
-- 경기 수정
-
-#### 🏟 구장 관리
-- 구장 등록
-- 구장 수정
-- 구장 삭제
-
-#### 🚌 버스 관리
-- 버스 등록
-- 버스 수정
-- 버스 삭제
-- 버스 스케줄 등록
-- 버스 스케줄 삭제
 
 
 ---
@@ -105,20 +54,29 @@
 
 ---
 
-## 📎 프로젝트 주요 산출물  
 
-각 항목은 클릭하여 확인하거나 다운로드할 수 있습니다.
+## 🎯 서비스 대상
 
-- ✅ 요구사항 정의서 : https://docs.google.com/spreadsheets/d/1KQKxB8eO9gHyPbQbWEiC2BqMWqx1NzDDvSr9orACbNc/edit?gid=200263830#gid=200263830
-- ✅ WBS : https://docs.google.com/spreadsheets/d/1KQKxB8eO9gHyPbQbWEiC2BqMWqx1NzDDvSr9orACbNc/edit?gid=602560201#gid=602560201
-- ✅ ERD image : 
-<p align="center">
-  <img src="./images/MHiT_ERD.png" width="2000" alt="MHiT ERD"/>
-</p>
-
+- 야구 경기를 관람하고 싶은 일반 사용자
+- 경기 예매와 이동편(셔틀버스)을 한 번에 확인하고 싶어하는 사용자
+- 구단 정보, 경기 일정, 구장 정보를 미리 알고 싶어하는 사용자
+- 실시간으로 경기 결과·승률·순위 등을 확인하고 싶은 야구 팬
+- 여러 앱을 켜지 않고 하나의 플랫폼에서 경기 관람 준비를 하고 싶은 사용자
 
 
 ---
+
+
+## 🔥 타 서비스와의 차별점
+
+### 🚌 경기 예매와 셔틀버스 정보를 하나의 서비스에서 제공
+경기 예매와 동시에 해당 경기장의 셔틀버스 정보를 확인할 수 있는  
+통합형 야구 관람 지원 서비스입니다.
+
+
+---
+
+
 ## 🎯 기대효과
 
 ### 1️⃣ 사용자 편의성 향상
@@ -131,3 +89,23 @@
 
 
 ---
+
+## 📎 프로젝트 주요 산출물  
+
+각 항목은 클릭하여 확인하거나 다운로드할 수 있습니다.
+
+- 📘 **[요구사항 정의서](https://docs.google.com/spreadsheets/d/1KQKxB8eO9gHyPbQbWEiC2BqMWqx1NzDDvSr9orACbNc/edit?gid=200263830#gid=200263830)**  
+  프로젝트 기능 정의 및 상세 요구사항 정리
+
+- 📙 **[WBS (작업 분류 체계)](https://docs.google.com/spreadsheets/d/1KQKxB8eO9gHyPbQbWEiC2BqMWqx1NzDDvSr9orACbNc/edit?gid=602560201#gid=602560201)**  
+  전체 프로젝트 일정과 작업 흐름 구성
+
+- 🗺️ **ERD (Database Schema)**  
+<p align="center">
+  <img src="./images/MHiT_ERD.png" width="2000" alt="MHiT ERD"/>
+</p>
+
+
+
+---
+
