@@ -1,7 +1,7 @@
 -- 이미 로그인 되어있음. 비밀번호만 한번 더 입력후 정보조회
 -- 마이페이지 정보조회
 delimiter //
-create procedure find_mypage(
+create procedure get_mypage(
 in password_in varchar(255)
 )
 

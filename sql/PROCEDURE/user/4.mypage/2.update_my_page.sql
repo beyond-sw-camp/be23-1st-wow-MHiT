@@ -1,20 +1,14 @@
--- 이미 로그인 되어있음. 비밀번호만 한번 더 입력후 정보 수정
-
+-- 이미 로그인 되어있음. 비밀번호,이메일 한번 더 입력후 정보 수정
 -- 개인정보 및 선호 구단 수정 프로시저
-update user_list 
-set user_name = 'honggildong', user_password='hong777', user_fav_team=3 
-where user_email='hong2@naver.com';
-
- -- 회원 정보 수정 
 delimiter //
-create procedure user_info_update
+create procedure update_my_page
 (in name_in varchar(255),
-in password_in varchar(255),
+in old_password_in varchar(255),
+in new_password_in varchar(255),
 in phone_in varchar(255),
-in old_email_in varchar(255), 
+in old_email_in varchar(255),
 in new_email_in varchar(255), 
 in fav_team_in varchar(255))
-
 begin
     declare T_id bigint(20);
     -- 좋아하는 팀 명을 적으면 id값으로 변환
@@ -30,17 +24,17 @@ begin
         then 
 			signal sqlstate '45000' 
 			set message_text = "이미 등록된 이메일입니다. ";
-
     else 
     -- 입력한 기존email이 맞을시, 수정
     update user_list
     set 
         user_name=name_in, 
-        user_password=password_in, 
+        user_password=new_password_in, 
         user_phone=phone_in, 
         user_email=new_email_in, 
         user_fav_team=T_id
-        where user_email=old_email_in;
+        where user_password=old_password_in and user_email=old_email_in;
     end if;
 end //
 delimiter ;
+
