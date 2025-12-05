@@ -11,4 +11,3 @@ begin
     where user_email='hong1@naver.com';
 end //
 delimiter ;
-
