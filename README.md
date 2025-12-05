@@ -14,6 +14,19 @@
 
 ---
 
+## 스택
+<p>
+<img src="https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariaDB&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+<img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
+</p>
+
+---
+
 ## 📅 프로젝트 기간  
 
 **2025.12.04 ~ 2025.12.05**
@@ -31,8 +44,10 @@
 - ✅ 요구사항 정의서 : https://docs.google.com/spreadsheets/d/1KQKxB8eO9gHyPbQbWEiC2BqMWqx1NzDDvSr9orACbNc/edit?gid=200263830#gid=200263830
 - ✅ WBS : https://docs.google.com/spreadsheets/d/1KQKxB8eO9gHyPbQbWEiC2BqMWqx1NzDDvSr9orACbNc/edit?gid=602560201#gid=602560201
 - ✅ ERD image : 
-<br>
 <p align="center">
   <img src="./images/MHiT_ERD.png" width="2000" alt="MHiT ERD"/>
 </p>
+
+
+
 
