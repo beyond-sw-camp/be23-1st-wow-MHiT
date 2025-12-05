@@ -1,8 +1,12 @@
 -- 마이페이지 정보조회(회원 이름, 전화번호, 이메일, 선호하는 팀이름 조회)
-select user_name, user_phone, user_email, t.team_name from user_list u inner join team_list t on u.user_fav_team=t.team_id where user_email='hong@naver.com';
+select user_name, user_phone, user_email, t.team_name 
+from user_list u 
+inner join team_list t 
+on u.user_fav_team=t.team_id
+where user_email='hong@naver.com';
 
 
--- 개인정보 및 선호 구단 변경
+-- 개인정보 및 선호 구단 수정
 update user_list 
 set user_name = 'honggildong', user_password='hong777', user_fav_team=3 
 where user_email='hong2@naver.com';

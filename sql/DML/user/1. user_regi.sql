@@ -10,7 +10,9 @@ where user_email='hong4@naver.com';
 
 
 -- 회원정보 조회
-select user_name from user_list 
+select user_name, user_phone,user_email,t.team_name 
+from user_list l left join team_list t 
+    on l.user_fav_team=t.team_id 
 where user_email='hong1@naver.com';
 
 
