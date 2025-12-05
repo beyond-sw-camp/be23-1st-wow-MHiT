@@ -71,7 +71,7 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
     END IF;
 
-    -- 4) 여기부터가 “경쟁 구간”: bus_res_list 를 잠그면서 처리
+    -- 4) bus_res_list 처리
 
     -- 4-1) 같은 유저의 중복 예약 확인 + 잠금
     SELECT COUNT(*)
