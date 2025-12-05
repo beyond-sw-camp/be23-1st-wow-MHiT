@@ -13,3 +13,4 @@ END //
 DELIMITER ;
 
 
+CALL change_bus_schedule_active(버스 스케쥴 id);
