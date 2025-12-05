@@ -675,7 +675,7 @@ BEGIN
 
     START TRANSACTION;
 
-    -- 1) 스케줄/게임 정보 (단순 조회)
+    -- 스케줄/게임 정보
     SELECT game_id, bus_id, is_canceled
       INTO v_game_id, v_bus_id, v_is_canceled
       FROM bus_schedule_list
@@ -691,7 +691,7 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
     END IF;
 
-    -- 2) 경기 예약 여부 확인 (단순 조회)
+    -- 경기 예약 여부 확인
     SELECT COUNT(*)
       INTO v_has_game_res
       FROM game_res_list
@@ -703,7 +703,7 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
     END IF;
 
-    -- 3) 버스 기본 정보 (좌석수/활성 여부, 잠그진 않아도 됨)
+    -- 버스 기본 정보 좌석수/활성 여부
     SELECT bus_seat_count, is_active
       INTO v_bus_seat_count, v_bus_is_active
       FROM bus_list
@@ -719,9 +719,9 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
     END IF;
 
-    -- 4) 여기부터가 “경쟁 구간”: bus_res_list 를 잠그면서 처리
+    -- bus_res_list 잠그면서 처리
 
-    -- 4-1) 같은 유저의 중복 예약 확인 + 잠금
+    -- 같은 유저의 중복 예약 확인 + 잠금
     SELECT COUNT(*)
       INTO v_dup
       FROM bus_res_list
@@ -734,7 +734,7 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg;
     END IF;
 
-    -- 4-2) 현재 예약 인원 합계 + 잠금
+    -- 현재 예약 인원 합계 + 잠금
     SELECT IFNULL(SUM(bus_res_count), 0)
       INTO v_current_reserved
       FROM bus_res_list
@@ -883,17 +883,17 @@ CREATE PROCEDURE insert_bus_one(
 BEGIN
     DECLARE v_cnt INT;
 
-    -- 1) 이미 존재하는 차량번호인지 확인
+    -- 이미 존재하는 차량번호인지 확인
     SELECT COUNT(*)
       INTO v_cnt
       FROM bus_list
      WHERE bus_num = p_bus_num;
 
-    -- 2) 있으면 안내 메시지만 출력
+    -- 있으면 안내 메시지만 출력
     IF v_cnt > 0 THEN
         SELECT CONCAT('이미 등록된 차량번호입니다: ', p_bus_num) AS message;
 
-    -- 3) 없으면 INSERT + 성공 메시지
+    -- 없으면 INSERT + 성공 메시지
     ELSE
         INSERT INTO bus_list (
             ground_id,
