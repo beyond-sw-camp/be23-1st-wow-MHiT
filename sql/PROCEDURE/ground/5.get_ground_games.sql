@@ -1,3 +1,4 @@
+--구장경기정보조회 프로시저
 delimiter //
 
 create procedure get_ground_games(

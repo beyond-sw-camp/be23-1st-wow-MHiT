@@ -13,6 +13,12 @@
 
 ---
 
+**팀원**
+
+김도균, 김태환, 황정윤, 홍진희
+
+---
+
 ## 📌 프로젝트 개요  
 
 - **MHiT** : 사용자가 원하는 야구 경기를 예매할 때 근방에서 해당 경기장까지 운행하는 셔틀 버스까지 예약할 수 있는 DB 중심의 프로젝트입니다.
@@ -618,7 +624,30 @@ end//
 delimiter ;
 
 -- 2. 버스예매
+DELIMITER //
 
+CREATE PROCEDURE insert_bus_reservation(
+    IN p_bs_s_id       BIGINT,
+    IN p_user_id       VARCHAR(36),
+    IN p_bus_res_count INT
+)
+BEGIN
+    DECLARE v_game_id          BIGINT;
+    DECLARE v_bus_id           BIGINT;
+    DECLARE v_is_canceled      TINYINT;
+    DECLARE v_bus_seat_count   INT;
+    DECLARE v_bus_is_active    TINYINT;
+    DECLARE v_has_game_res     INT;
+    DECLARE v_current_reserved INT;
+    DECLARE v_remain           INT;
+    DECLARE v_dup              INT;
+    DECLARE v_msg              TEXT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
 
 
 ```
