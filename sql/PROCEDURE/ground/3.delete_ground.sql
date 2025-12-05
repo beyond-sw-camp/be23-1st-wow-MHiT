@@ -1,3 +1,4 @@
+--구장삭제프로시저
 delimiter //
 
 create procedure delete_ground (

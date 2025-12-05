@@ -618,7 +618,30 @@ end//
 delimiter ;
 
 -- 2. 버스예매
+DELIMITER //
 
+CREATE PROCEDURE insert_bus_reservation(
+    IN p_bs_s_id       BIGINT,
+    IN p_user_id       VARCHAR(36),
+    IN p_bus_res_count INT
+)
+BEGIN
+    DECLARE v_game_id          BIGINT;
+    DECLARE v_bus_id           BIGINT;
+    DECLARE v_is_canceled      TINYINT;
+    DECLARE v_bus_seat_count   INT;
+    DECLARE v_bus_is_active    TINYINT;
+    DECLARE v_has_game_res     INT;
+    DECLARE v_current_reserved INT;
+    DECLARE v_remain           INT;
+    DECLARE v_dup              INT;
+    DECLARE v_msg              TEXT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
 
 
 ```

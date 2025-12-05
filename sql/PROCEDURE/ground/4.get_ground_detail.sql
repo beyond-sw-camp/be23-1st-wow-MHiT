@@ -1,3 +1,4 @@
+--구장정보조회프로시저
 delimiter //
 
 create procedure get_ground_detail(
