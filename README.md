@@ -110,3 +110,143 @@
 
 ---
 
+### 쿼리
+
+  <details>
+  <summary><b>DDL</b></summary>
+
+```sql
+ -- 1. 관리자 테이블 
+create table admin_list(
+  admin_id varchar(36) not null primary key default (uuid()),
+  admin_name varchar(255) not null, 
+  admin_password varchar(255) not null);
+
+  alter table admin_list add column is_active tinyint default 1;
+
+
+
+ --2. 유저 테이블
+create table user_list(
+  user_id varchar(36) not null primary key default (uuid()), 
+  user_name varchar(255) not null, 
+  admin_password varchar(255) not null, 
+  user_phone varchar(255) not null, 
+  user_email varchar(255) not null, 
+  user_fav_team bigint);
+
+alter table user_list add constraint 
+  foreign key (user_fav_team) references team_list(team_id) 
+  on delete set null on update cascade;
+
+alter table user_list add column is_active tinyint default 1;
+
+
+ -- 3. 팀 테이블
+ create table team_list(
+    team_id bigint auto_increment primary key, 
+    ground_id bigint not null, 
+    admin_id varchar(36) NOT NULL, 
+    team_name varchar(255) not null, 
+    foreign key(ground_id) references ground_list(ground_id), 
+    foreign key(admin_id) references admin_list(admin_id));
+
+
+-- 4. 경기장 테이블
+--경기장 정보
+create table ground_list(  
+    ground_id bigint not null auto_increment,admin_id varchar(36) not null,
+    area varchar(255) not null,ground_name varchar(255),
+    address varchar(255) not null,seat_count bigint not null,
+    primary key(ground_id),
+    foreign key (admin_id) references admin(admin_id)
+);
+
+--경기장 좌석 정보
+create table seat_list( 
+    seat_id bigint not null auto_increment,ground_id bigint not null,
+    seat_name varchar(255) not null,ground_sight varchar(255)not null,
+    ground_grade varchar(255) not null,price bigint not null,
+    primary key(seat_id), 
+    foreign key (ground_id) references ground_list(ground_id)
+);
+
+-- 5. 경기 테이블 
+--경기 일정
+create table game_schedule_list( 
+    game_id bigint auto_increment primary key,
+    ground_id bigint not null,
+    admin_id vARCHAR(36) NOT NULL,
+    h_team_id bigint not null,
+    a_team_id bigint not null,
+    win bigint,
+    foreign key(ground_id) references ground_list(ground_id),
+    foreign key(admin_id) references admin_list(admin_id));
+
+alter table game_schedule_list add column game_date datetime;
+alter table game_schedule_list modify column game_date datetime not null;
+
+
+-- 6. 버스 테이블
+-- 버스 정보
+CREATE TABLE bus_list(
+    bus_id BIGINT NOT NULL auto_increment,
+    ground_id BIGINT NOT NULL,
+    admin_id VARCHAR(36) NOT NULL,
+    bus_seat_count INT,
+    bus_num VARCHAR(20) NOT NULL UNIQUE,
+    is_active TINYINT NOT NULL DEFAULT 1,
+    PRIMARY KEY (bus_id),
+    FOREIGN KEY (admin_id) REFERENCES admin_list (admin_id)
+);
+
+-- 버스시간
+CREATE TABLE bus_schedule_list(
+    bs_s_id BIGINT NOT NULL auto_increment,
+    bus_id BIGINT NOT NULL,
+    admin_id VARCHAR(36) NOT NULL,
+    game_id BIGINT NOT NULL,
+    schedule_time    TIMESTAMP,
+    PRIMARY KEY (bs_s_id),
+    FOREIGN KEY (bus_id) REFERENCES bus_list (bus_id),
+    FOREIGN KEY (admin_id) REFERENCES admin_list  (admin_id),
+    FOREIGN KEY (game_id) REFERENCES game_schedule_list (game_id)
+);
+
+
+-- 7. 예매 테이블
+--경기 예매 
+create table game_res_list(
+    game_res_id bigint auto_increment primary key,
+    user_id varchar(36) not null, 
+    game_id bigint NOT NULL, 
+    game_res_count bigint not null, 
+    game_res_date datetime not null, 
+    foreign key(user_id) references user_list(user_id), 
+    foreign key(game_id) references game_schedule_list(game_id));
+
+--좌석 예매
+create table game_res_seat_detail(
+    game_res_seat_detail_id bigint not null auto_increment,
+    game_res_id bigint not null,seat_id bigint not null,
+    primary key(game_res_seat_detail_id), 
+    foreign key(game_res_id) references game_res_list(game_res_id),
+    foreign key(seat_id) references seat_list(seat_id)
+);
+
+--버스 예매
+CREATE TABLE bus_res_list (
+    bus_res_id BIGINT NOT NULL auto_increment,
+    bs_s_id BIGINT,
+    user_id VARCHAR(36) NOT NULL,
+    bus_res_count INT,
+    PRIMARY KEY (bus_res_id),
+    FOREIGN KEY (bs_s_id) REFERENCES bus_schedule_list (bs_s_id),
+    FOREIGN KEY (user_id) REFERENCES user_list (user_id)
+);
+
+```
+  </details>
+
+  
+  
